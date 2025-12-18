@@ -30,45 +30,45 @@ This is a **fully-typed, end-to-end Brain-Computer Interface (BCI) research demo
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                 BCI PIPELINE (Backend)                   │
+│                 BCI PIPELINE (Backend)                  │
 ├─────────────────────────────────────────────────────────┤
-│                                                           │
-│  1. EEG SIMULATION                                        │
-│     └─→ Generate P300-like signals (target/non-target)   │
-│                                                           │
-│  2. PREPROCESSING                                         │
-│     └─→ Bandpass filter (0.1-30 Hz)                      │
-│     └─→ Notch filter (50 Hz)                             │
-│     └─→ DC offset removal                                │
-│                                                           │
-│  3. FEATURE EXTRACTION                                    │
-│     └─→ Mean amplitude (300-600ms window)                │
-│     └─→ Peak amplitude                                   │
-│     └─→ Peak latency                                     │
-│                                                           │
-│  4. CLASSIFICATION (LDA)                                  │
-│     └─→ Linear Discriminant Analysis                     │
-│     └─→ Binary decision: YES / NO                        │
-│                                                           │
-│  5. DECISION & ADAPTATION                                │
-│     └─→ Multi-trial smoothing                            │
-│     └─→ Adaptive difficulty scaling                      │
+│                                                         │
+│  1. EEG SIMULATION                                      │
+│     └─→ Generate P300-like signals (target/non-target)  │
+│                                                         │
+│  2. PREPROCESSING                                       │
+│     └─→ Bandpass filter (0.1-30 Hz)                     │
+│     └─→ Notch filter (50 Hz)                            │
+│     └─→ DC offset removal                               │
+│                                                         │
+│  3. FEATURE EXTRACTION                                  │
+│     └─→ Mean amplitude (300-600ms window)               │
+│     └─→ Peak amplitude                                  │
+│     └─→ Peak latency                                    │
+│                                                         │
+│  4. CLASSIFICATION (LDA)                                │
+│     └─→ Linear Discriminant Analysis                    │
+│     └─→ Binary decision: YES / NO                       │
+│                                                         │
+│  5. DECISION & ADAPTATION                               │
+│     └─→ Multi-trial smoothing                           │
+│     └─→ Adaptive difficulty scaling                     │
 │     └─→ Session state persistence (Prisma)              │
-│                                                           │
+│                                                         │
 └─────────────────────────────────────────────────────────┘
          │
          │ REST API (/api/eeg, /api/sessions)
          ▼
 ┌─────────────────────────────────────────────────────────┐
-│           GAMIFIED INTERFACE (Frontend)                   │
+│           GAMIFIED INTERFACE (Frontend)                 │
 ├─────────────────────────────────────────────────────────┤
-│                                                           │
-│  • Child-friendly animated game board                     │
+│                                                         │
+│  • Child-friendly animated game board                   │
 │  • 3-4 animal/shape stimuli with flashing               │
-│  • Real-time performance dashboard                       │
-│  • Adaptive difficulty feedback                          │
-│  • Session management & progress tracking                │
-│                                                           │
+│  • Real-time performance dashboard                      │
+│  • Adaptive difficulty feedback                         │
+│  • Session management & progress tracking               │
+│                                                         │
 └─────────────────────────────────────────────────────────┘
 ```
 
@@ -83,7 +83,7 @@ This is a **fully-typed, end-to-end Brain-Computer Interface (BCI) research demo
 - **Architecture:** Microservice-ready with typed services and routes
 
 ### **Frontend**
-- **Library:** React 18 (TypeScript only)
+- **Library:** React 18 (TypeScript)
 - **Styling:** Tailwind CSS
 - **UI Components:** Custom + Recharts (charts)
 - **Build Tool:** Vite (fastest TS bundler)
@@ -810,6 +810,16 @@ Open browser DevTools (F12):
 npm run prisma:studio
 # Opens visual database browser at http://localhost:5555
 ```
+
+---
+
+## 📷 Demo
+
+![Demo](demo.png)
+
+## 📄 Documentation
+
+For detailed information, please refer to the [BCI CP Cited Document](BCI_CP_Cited.pdf).
 
 ---
 
