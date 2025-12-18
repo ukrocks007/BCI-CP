@@ -1,0 +1,27 @@
+{
+  "name": "bci-research-demo",
+  "version": "1.0.0",
+  "description": "BCI research demonstration prototype for pediatric cerebral palsy",
+  "private": true,
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "prisma": {
+    "seed": "npx tsx prisma/seed.ts"
+  },
+  "scripts": {
+    "dev": "npm run dev --workspace=backend & npm run dev --workspace=frontend",
+    "backend": "npm run dev --workspace=backend",
+    "frontend": "npm run dev --workspace=frontend",
+    "build": "npm run build --workspace=backend && npm run build --workspace=frontend",
+    "prisma:migrate": "npx prisma migrate dev",
+    "prisma:seed": "npx tsx prisma/seed.ts",
+    "prisma:studio": "npx prisma studio"
+  },
+  "devDependencies": {
+    "@prisma/client": "^5.7.1",
+    "@types/cors": "^2.8.19",
+    "prisma": "^5.7.1"
+  }
+}

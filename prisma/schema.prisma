@@ -1,0 +1,87 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// BCI Research Demonstration Schema
+// Models track sessions, trials, predictions, and calibration state.
+// Maps to research paper: "Breaking Barriers: Feasibility of Affordable Brain-Computer Interfaces for Pediatric Cerebral Palsy"
+
+// Session: Represents a complete BCI session
+// A session contains multiple trials over time
+model Session {
+  id        String     @id @default(cuid())
+  userId    String
+  startedAt DateTime   @default(now())
+  endedAt   DateTime?
+  status    String     @default("active") // active, paused, completed
+  totalTrials Int      @default(0)
+  accuracy  Float      @default(0)
+  trials    Trial[]
+  calibration CalibrationState?
+
+  @@index([userId])
+}
+
+// Trial: Represents a single stimulus presentation
+// Each trial has a predicted response and confidence
+model Trial {
+  id              String   @id @default(cuid())
+  sessionId       String
+  session         Session  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  trialNumber     Int
+  targetType      String   // "target" or "nontarget"
+  stimulusTime    DateTime @default(now())
+  responseTime    Int      // milliseconds after stimulus
+  accuracy        Boolean  // true if prediction matches targetType
+  predictions     Prediction[]
+
+  @@unique([sessionId, trialNumber])
+  @@index([sessionId])
+}
+
+// Prediction: Classification result for a trial
+// Contains the LDA prediction and confidence score
+model Prediction {
+  id         String   @id @default(cuid())
+  trialId    String
+  trial      Trial    @relation(fields: [trialId], references: [id], onDelete: Cascade)
+  prediction String   // "YES" or "NO"
+  confidence Float    // [0, 1]
+  timestamp  DateTime @default(now())
+
+  @@index([trialId])
+}
+
+// CalibrationState: Tracks system adaptation during the session
+// Paper Reference: The system adapts difficulty based on performance
+// - High accuracy → increase difficulty (faster flashing, more objects)
+// - Low accuracy → decrease difficulty
+model CalibrationState {
+  id              String   @id @default(cuid())
+  sessionId       String   @unique
+  session         Session  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  
+  // Difficulty parameters
+  flashSpeed      Float    @default(1.0)  // 1.0 = normal, < 1.0 = slower, > 1.0 = faster
+  objectCount     Int      @default(3)    // 3-4 objects
+  
+  // Performance tracking
+  recentAccuracy  Float    @default(0.5)  // Rolling accuracy (last 10 trials)
+  confidenceThreshold Float @default(0.5) // Threshold for YES prediction
+  
+  // Pacing
+  trialInterval   Int      @default(2000) // milliseconds between trials
+  lastTrialTime   DateTime @default(now())
+  
+  updatedAt       DateTime @updatedAt
+
+  @@index([sessionId])
+}
